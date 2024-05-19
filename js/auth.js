@@ -44,8 +44,8 @@ function registerUser() {
       console.log("user uid = ",user.uid);
 
       try {
-        const firebaseCollection = collection(db, 'User');
-        const userDocRef = doc(firebaseCollection, user.uid);
+        const userCollection = collection(db, 'User');
+        const userDocRef = doc(userCollection, user.uid);
         setDoc(userDocRef, {name, email})
           .then(() => {
             console.log("User registered!");
