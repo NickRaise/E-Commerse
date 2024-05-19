@@ -25,7 +25,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth();
-console.log("this is auth ->",auth);
 
 
 console.log('------');
@@ -67,7 +66,6 @@ function registerUser() {
 
 
 // Invoking registerUser method after clicking on submit
-
 const registerBtn = document.querySelector("#register-user");
 if(registerBtn) {
   registerBtn.addEventListener("click", (event) => {
@@ -81,6 +79,31 @@ if(registerBtn) {
 
 
 
+// Login the User
+function loginUser() {
+  const email = document.querySelector("#email").value; 
+  const password = document.querySelector("#password").value;
+  console.log(email, password);
+  
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userDetail) => {
+        console.log('Login Successfully!');
+    })
+    .catch((e) => {
+      console.log('User not Found');
+    });
+}
+
+
+
+// Invoking loginUser method after clicking on submit
+const loginBtn = document.querySelector("#login-user");
+if(loginBtn) {
+  loginBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    loginUser();
+  });
+}
 
 
 
