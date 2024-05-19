@@ -49,7 +49,8 @@ function registerUser() {
         const userDocRef = doc(firebaseCollection, user.uid);
         setDoc(userDocRef, {name, email})
           .then(() => {
-            alert("User registered!");
+            console.log("User registered!");
+            window.location.href = "login.html";
           })
           .catch((error) => {
             console.error("Error setting user data:", error);
@@ -66,10 +67,14 @@ function registerUser() {
 
 
 // Invoking registerUser method after clicking on submit
-document.querySelector("#register-user").addEventListener("click", (event) => {
-  event.preventDefault();
-  registerUser();
-});
+
+const registerBtn = document.querySelector("#register-user");
+if(registerBtn) {
+  registerBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    registerUser();
+  });
+}
 
 
 
