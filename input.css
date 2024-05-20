@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    scroll-behavior: smooth;
+}
+
+
+body {
+    background: linear-gradient(to right, #6B7280, #A5B4C4);
+}
+
+.hero-section {
+    background: linear-gradient(to right, #111827, #3A3A52);
+}
+
+.text-theme-color {
+    color: #F3F4F6;
+}
+
+.explore-btn {
+    background-color: #3B82F6;
+    transition: 0.1s ease;
+    border: 1px solid #3B82F6;
+}
+
+.explore-btn:hover {
+    background-color: #1E293B;
+    border: 1px solid #D1D5DB;
+}
+
+.trending-products {
+    gap: 49px;
+}
+
+.product-card {
+    max-width: 240px;
+    height: 451px;
+}
+
+.product-card a img {
+    max-height: 240px;
+}
+
+.product-data > a{
+    /* min-height: 200px;
+    position: relative; */
+    min-height: 100px;
+    display: block;
+}
+
+
+
+
+
+/* Main Navbar Color (#111827):
+
+#111827 (Base color for the navbar)
+Accent Color:
+
+#6B7280 (A slightly lighter shade of gray that contrasts nicely with the main navbar color)
+Call-to-Action Color:
+
+#3B82F6 (A vibrant blue that stands out and attracts attention for buttons or links)
+Background Color:
+
+#F3F4F6 (A light grayish tone that provides contrast to text and elements on the page)
+Text Color:
+
+#FFFFFF (White text for readability against the dark background)
+Secondary Text Color:
+
+#9CA3AF (A light gray for secondary text or less important information)
+Hover Color (for buttons, links, etc.):
+
+#1E293B (A darker shade of the main navbar color for hover effects, providing visual feedback)
+Error/Alert Color:
+
+#EF4444 (A vibrant red for error messages or alerts)
+Success Color:
+
+#10B981 (A green color indicating success, like for successful order placements)
+Neutral Color (for borders, dividers, etc.):
+
+#D1D5DB (A light gray that's neither too light nor too dark, suitable for borders and dividers) */
