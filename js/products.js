@@ -1,23 +1,29 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-import {getFirestore, collection, getDocs, doc, setDoc, addDoc} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js'
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  setDoc,
+  addDoc,
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-
-console.log('test');
-
-
-
-
+console.log("test");
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAfvkCmr4DiHoqnojqpw98iQOChgHkVn9Y",
-    authDomain: "shopsphere-67451.firebaseapp.com",
-    projectId: "shopsphere-67451",
-    storageBucket: "shopsphere-67451.appspot.com",
-    messagingSenderId: "816529413111",
-    appId: "1:816529413111:web:f18d7622f2f3b6827594f2",
-    measurementId: "G-7MBHKFJ1HR"
+  apiKey: "AIzaSyAfvkCmr4DiHoqnojqpw98iQOChgHkVn9Y",
+  authDomain: "shopsphere-67451.firebaseapp.com",
+  projectId: "shopsphere-67451",
+  storageBucket: "shopsphere-67451.appspot.com",
+  messagingSenderId: "816529413111",
+  appId: "1:816529413111:web:f18d7622f2f3b6827594f2",
+  measurementId: "G-7MBHKFJ1HR",
 };
 
 // Initialize Firebase
@@ -25,69 +31,109 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth();
 
-
-
 let products = [];
 let currentIdx = 0;
 const limit = 12;
 
+
+async function updateData(productOb) {
+    const productData = {
+        title : productOb.title,
+        description : productOb.description,
+        price : productOb.price,
+        rating : productOb.rating,
+        image : productOb.thumbnail,
+    }
+
+    try {
+        const docRef = doc(db, 'viewProduct', 'singleProductData');
+        await setDoc(docRef, productData);
+        console.log('DataOverriden');
+    } catch(e) {
+        console.log('Error overrriding the data');
+    }
+}
+
+
+
+
+
 const trendingProductContainer = document.querySelector(".trending-products");
 const loadingIndicator = document.querySelector("#loadingIndicator");
-// loadingIndicator.style.display = "none"
-
+loadingIndicator.style.display = "none"
 
 document.addEventListener("DOMContentLoaded", () => {
-    fetch('./js/product.json')
-        .then(response => response.json())
-        .then((data) => {
-            products = shuffleArray(data);
-            loadProducts();
-            window.addEventListener('scroll', scrollHandle);
-        })
-        .catch(e => console.log('Could not fetch the product.json', e))
+  fetch("js/product.json")
+    .then((response) => response.json())
+    .then((data) => {
+      products = shuffleArray(data);
+      loadProducts();
+      window.addEventListener("scroll", scrollHandle);
+    })
+    .catch((e) => console.log("Could not fetch the product.json", e));
 });
 
 function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }
 
-
 function loadProducts() {
-    const nextIndex = currentIdx + limit;
-    const productToLoad = products.slice(currentIdx, nextIndex);
+  const nextIndex = currentIdx + limit;
+  const productToLoad = products.slice(currentIdx, nextIndex);
 
-    productToLoad.forEach(e => {
+  productToLoad.forEach((e) => {
+    const product = getProduct(e);
 
-        const product = getProduct(e);
+    // const clickableElement = product.querySelector('a'); 
+    // clickableElement.addEventListener('click', () => {
+    //     console.log('You clicked on the event product');
+    // });
 
-        trendingProductContainer.innerHTML = trendingProductContainer.innerHTML + product;
-
-    });
-
-    currentIdx = nextIndex;
-    loadingIndicator.style.display = 'none';
     
+    trendingProductContainer.appendChild(product);
+    trendingProductContainer.lastChild.addEventListener('click', async () => {
+        const res = await updateData(e);
+        window.location.href = 'product.html';
+        console.log(product);
+    })
+  });
+
+  currentIdx = nextIndex;
+  loadingIndicator.style.display = "none";
 }
 
 function scrollHandle() {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100 && currentIdx < products.length) {
-        window.removeEventListener('scroll', scrollHandle);
-        loadingIndicator.style.display = 'block';
-        setTimeout(() => {
-            loadProducts();
-            window.addEventListener('scroll', scrollHandle);
-        }, 500);
-    }
+  if (
+    window.innerHeight + window.scrollY >= document.body.offsetHeight - 100 &&
+    currentIdx < products.length
+  ) {
+    window.removeEventListener("scroll", scrollHandle);
+    loadingIndicator.style.display = "block";
+    setTimeout(() => {
+      loadProducts();
+      window.addEventListener("scroll", scrollHandle);
+    }, 500);
+  }
 }
 
-
-
 function getProduct(proObject) {
-    return `<div class="product-card w-full bg-white border border-gray-200 rounded-lg shadow dark:border-gray-700">
+  const div = document.createElement("div");
+  div.classList.add(
+    "product-card",
+    "w-full",
+    "bg-white",
+    "border",
+    "border-gray-200",
+    "rounded-lg",
+    "shadow",
+    "dark:border-gray-700"
+  );
+
+  div.innerHTML = `
     <a href="#">
         <img class="p-2 mx-auto rounded-t-lg size-10/12" src=${proObject.thumbnail} alt="product image" />
     </a>
@@ -121,15 +167,9 @@ function getProduct(proObject) {
                 <a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">View</a>
             </div>
         </div>
-    </div>
-    </div>`
+    </div>`;
+  return div;
 }
-
-
-
-
-
-
 
 
 
@@ -162,7 +202,3 @@ function getProduct(proObject) {
 // productData.forEach(e => {
 //     const docRef = addDoc(productCollection, e);
 // })
-
-
-
-
