@@ -48,6 +48,7 @@ async function getProductData() {
 
 getProductData();
 
+
 function getProduct(product) {
     return `<div class="product-view flex items-center p-5 gap-20">
     <div class="product-img shadow-lg p-5">
@@ -78,7 +79,8 @@ function getProduct(product) {
         <p class="text-xl">${product.description}</p>
         <div class="flex gap-10 text-center">
             <h2 class="text-5xl">$${product.price}</h2>
-            <button class="add-cart-btn text-xl border border-black px-3 py-1 rounded-lg" type="button">Add to cart</button>
+            <button class="add-cart-btn text-xl border border-black px-3 py-1 rounded-lg" type="button" onclick="document.querySelector('.add-cart-btn').classList.add('product-added'); document.querySelector('.add-cart-btn').innerHTML = 'Added'; document.querySelector('.add-cart-btn').classList.remove('add-cart-btn')">Add to cart</button>
+
         </div>
     </div>
     </div>`;

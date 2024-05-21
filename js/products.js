@@ -35,32 +35,33 @@ let products = [];
 let currentIdx = 0;
 const limit = 12;
 
-
 async function updateData(productOb) {
-    const productData = {
-        title : productOb.title,
-        description : productOb.description,
-        price : productOb.price,
-        rating : productOb.rating,
-        image : productOb.thumbnail,
-    }
+  const productData = {
+    title: productOb.title,
+    description: productOb.description,
+    price: productOb.price,
+    rating: productOb.rating,
+    image: productOb.thumbnail,
+  };
 
-    try {
-        const docRef = doc(db, 'viewProduct', 'singleProductData');
-        await setDoc(docRef, productData);
-        console.log('DataOverriden');
-    } catch(e) {
-        console.log('Error overrriding the data');
-    }
+  try {
+    const docRef = doc(db, "viewProduct", "singleProductData");
+    await setDoc(docRef, productData);
+    console.log("DataOverriden");
+  } catch (e) {
+    console.log("Error overrriding the data");
+  }
+
+  // updateUserHistory(productOb);
 }
 
+// function updateUserHistory(ob) {
 
-
-
+// }
 
 const trendingProductContainer = document.querySelector(".trending-products");
 const loadingIndicator = document.querySelector("#loadingIndicator");
-loadingIndicator.style.display = "none"
+loadingIndicator.style.display = "none";
 
 document.addEventListener("DOMContentLoaded", () => {
   fetch("js/product.json")
@@ -88,18 +89,12 @@ function loadProducts() {
   productToLoad.forEach((e) => {
     const product = getProduct(e);
 
-    // const clickableElement = product.querySelector('a'); 
-    // clickableElement.addEventListener('click', () => {
-    //     console.log('You clicked on the event product');
-    // });
-
-    
     trendingProductContainer.appendChild(product);
-    trendingProductContainer.lastChild.addEventListener('click', async () => {
-        const res = await updateData(e);
-        window.location.href = 'product.html';
-        console.log(product);
-    })
+    trendingProductContainer.lastChild.addEventListener("click", async () => {
+      const res = await updateData(e);
+      window.location.href = "product.html";
+      console.log(product);
+    });
   });
 
   currentIdx = nextIndex;
@@ -170,28 +165,6 @@ function getProduct(proObject) {
     </div>`;
   return div;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //Code to add the json product in the data base {do not uncomment it}
 // console.log(productData[0]);
