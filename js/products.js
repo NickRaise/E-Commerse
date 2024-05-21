@@ -8,7 +8,7 @@ import {
 import {
   getFirestore,
   collection,
-  getDocs,
+  getDoc,
   doc,
   setDoc,
   addDoc,
@@ -52,12 +52,40 @@ async function updateData(productOb) {
     console.log("Error overrriding the data");
   }
 
-  // updateUserHistory(productOb);
+  await updateUserCategory(productOb, productOb.category);
 }
 
-// function updateUserHistory(ob) {
+async function updateUserCategory(ob, categoryType) {
+  auth.onAuthStateChanged(async (user) => {
+    if (user) {
+      // User is signed in
+      console.log("---> User is signed in:", user);
+      const docRef = await doc(db, "User", user.uid);
+      getDoc(docRef).then(async (snapshot) => {
+        let data = snapshot.data();
+        if (Array.isArray(data.category)) {
+          // Check if temp already exists in the category array
+          if (!data.category.includes(categoryType)) {
+            // If not, push temp to the category array
+            data.category.push(categoryType);
+          }
+        } else {
+          // If category doesn't exist or is not an array, initialize it as an array with temp
+          data.category = [categoryType];
+        }
 
-// }
+        console.log(data.category);
+        await setDoc(docRef, data);
+      });
+    } else {
+      // No user is signed in
+      console.log("No user is signed in");
+    }
+  });
+  setTimeout(() => {
+    window.location.href = "product.html";
+  }, 1000);
+}
 
 const trendingProductContainer = document.querySelector(".trending-products");
 const loadingIndicator = document.querySelector("#loadingIndicator");
@@ -91,8 +119,7 @@ function loadProducts() {
 
     trendingProductContainer.appendChild(product);
     trendingProductContainer.lastChild.addEventListener("click", async () => {
-      const res = await updateData(e);
-      window.location.href = "product.html";
+      await updateData(e);
       console.log(product);
     });
   });
