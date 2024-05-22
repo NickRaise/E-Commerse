@@ -135,10 +135,10 @@ function scrollHandle() {
   ) {
     window.removeEventListener("scroll", scrollHandle);
     loadingIndicator.style.display = "block";
-    setTimeout(() => {
+    
       loadProducts();
       window.addEventListener("scroll", scrollHandle);
-    }, 500);
+   
   }
 }
 
